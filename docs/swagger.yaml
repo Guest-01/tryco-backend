@@ -1,0 +1,14 @@
+info:
+  contact: {}
+  description: This is the backend for TryCo.
+  title: TryCo API
+  version: "1.0"
+paths:
+  /api/v1/hello:
+    get:
+      description: 예시로 만든 API입니다. 해당 핸들러를 틀로 삼아 다른 핸들러를 작성하세요.
+      responses: {}
+      summary: Hello API
+      tags:
+      - demo
+swagger: "2.0"
