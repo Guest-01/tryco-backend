@@ -1,5 +1,20 @@
+### Health Check
 GET http://localhost:3000
 
-###
-
+### Demo Hello API
 GET http://localhost:3000/api/v1/hello
+
+### Demo sqlc Books API
+GET http://localhost:3000/api/v1/books
+
+###
+GET http://localhost:3000/api/v1/books/1
+
+###
+POST http://localhost:3000/api/v1/books
+Content-Type: application/json
+
+{
+  "title": "The Great Gatsby",
+  "author": "F. Scott Fitzgerald"
+}

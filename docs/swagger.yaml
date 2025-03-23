@@ -1,14 +1,152 @@
+definitions:
+  fiber.Map:
+    additionalProperties: true
+    type: object
+  sqlc.Book:
+    properties:
+      author:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  sqlc.CreateBookParams:
+    properties:
+      author:
+        type: string
+      title:
+        type: string
+    type: object
+  sqlc.UpdateBookParams:
+    properties:
+      author:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
 info:
   contact: {}
   description: This is the backend for TryCo.
   title: TryCo API
   version: "1.0"
 paths:
-  /api/v1/hello:
+  /api/v1/books:
     get:
-      description: 예시로 만든 API입니다. 해당 핸들러를 틀로 삼아 다른 핸들러를 작성하세요.
-      responses: {}
-      summary: Hello API
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/sqlc.Book'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: GetBooks
       tags:
-      - demo
+      - books
+    post:
+      parameters:
+      - description: Book object
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/sqlc.CreateBookParams'
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/sqlc.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: CreateBook
+      tags:
+      - books
+  /api/v1/books/{id}:
+    delete:
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: DeleteBook
+      tags:
+      - books
+    get:
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sqlc.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: GetBook
+      tags:
+      - books
+    put:
+      parameters:
+      - description: Book ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Book object
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/sqlc.UpdateBookParams'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sqlc.Book'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/fiber.Map'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/fiber.Map'
+      summary: UpdateBook
+      tags:
+      - books
 swagger: "2.0"
