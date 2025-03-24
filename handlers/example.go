@@ -40,7 +40,7 @@ func (h *Handler) GetBook(c *fiber.Ctx) error {
 			"error": "Invalid book ID",
 		})
 	}
-	book, err := h.queries.GetBook(c.Context(), int32(id))
+	book, err := h.queries.GetBook(c.Context(), id)
 	if err != nil {
 		log.Println("Error getting book:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -107,7 +107,7 @@ func (h *Handler) UpdateBook(c *fiber.Ctx) error {
 		})
 	}
 
-	book.ID = int32(id)
+	book.ID = id
 
 	updatedBook, err := h.queries.UpdateBook(c.Context(), sqlc.UpdateBookParams{
 		ID:     book.ID,
@@ -140,7 +140,7 @@ func (h *Handler) DeleteBook(c *fiber.Ctx) error {
 		})
 	}
 
-	err = h.queries.DeleteBook(c.Context(), int32(id))
+	err = h.queries.DeleteBook(c.Context(), id)
 	if err != nil {
 		log.Println("Error deleting book:", err)
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{

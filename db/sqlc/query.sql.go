@@ -37,7 +37,7 @@ DELETE FROM books
 WHERE id = $1
 `
 
-func (q *Queries) DeleteBook(ctx context.Context, id int32) error {
+func (q *Queries) DeleteBook(ctx context.Context, id int) error {
 	_, err := q.db.Exec(ctx, deleteBook, id)
 	return err
 }
@@ -48,7 +48,7 @@ FROM books
 WHERE id = $1
 `
 
-func (q *Queries) GetBook(ctx context.Context, id int32) (Book, error) {
+func (q *Queries) GetBook(ctx context.Context, id int) (Book, error) {
 	row := q.db.QueryRow(ctx, getBook, id)
 	var i Book
 	err := row.Scan(
@@ -101,7 +101,7 @@ RETURNING id, title, author, created_at
 type UpdateBookParams struct {
 	Title  string `json:"title"`
 	Author string `json:"author"`
-	ID     int32  `json:"id"`
+	ID     int    `json:"id"`
 }
 
 func (q *Queries) UpdateBook(ctx context.Context, arg UpdateBookParams) (Book, error) {
