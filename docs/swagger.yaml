@@ -2,6 +2,17 @@ definitions:
   fiber.Map:
     additionalProperties: true
     type: object
+  handlers.UserResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
   sqlc.Book:
     properties:
       author:
@@ -18,6 +29,26 @@ definitions:
       author:
         type: string
       title:
+        type: string
+    type: object
+  sqlc.CreateUserParams:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  sqlc.CreateUserRow:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      username:
         type: string
     type: object
   sqlc.UpdateBookParams:
@@ -48,8 +79,6 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/fiber.Map'
-      security:
-      - SessionCookie: []
       summary: GetBooks
       tags:
       - books
@@ -74,6 +103,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/fiber.Map'
+      security:
+      - SessionCookie: []
       summary: CreateBook
       tags:
       - books
@@ -96,6 +127,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/fiber.Map'
+      security:
+      - SessionCookie: []
       summary: DeleteBook
       tags:
       - books
@@ -148,9 +181,64 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/fiber.Map'
+      security:
+      - SessionCookie: []
       summary: UpdateBook
       tags:
       - books
+  /api/v1/users:
+    post:
+      parameters:
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/sqlc.CreateUserParams'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/sqlc.CreateUserRow'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create User
+      tags:
+      - users
+  /api/v1/users/{id}:
+    get:
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UserResponse'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get User By ID
+      tags:
+      - users
 securityDefinitions:
   SessionCookie:
     in: cookie

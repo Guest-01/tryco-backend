@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"log"
-	"strconv"
 
 	"github.com/Guest-01/tryco-backend/db/sqlc"
 	"github.com/gofiber/fiber/v2"
@@ -33,7 +32,7 @@ func (h *Handler) GetBooks(c *fiber.Ctx) error {
 // @failure	500	{object}	fiber.Map
 // @failure	400	{object}	fiber.Map
 func (h *Handler) GetBook(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Println("Error converting id to int:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -91,7 +90,7 @@ func (h *Handler) CreateBook(c *fiber.Ctx) error {
 // @failure	400	{object}	fiber.Map
 // @security    SessionCookie
 func (h *Handler) UpdateBook(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Println("Error converting id to int:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
@@ -132,7 +131,7 @@ func (h *Handler) UpdateBook(c *fiber.Ctx) error {
 // @failure		400	{object}	fiber.Map
 // @security    SessionCookie
 func (h *Handler) DeleteBook(c *fiber.Ctx) error {
-	id, err := strconv.Atoi(c.Params("id"))
+	id, err := c.ParamsInt("id")
 	if err != nil {
 		log.Println("Error converting id to int:", err)
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{

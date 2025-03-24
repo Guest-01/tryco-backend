@@ -14,3 +14,11 @@ type Book struct {
 	Author    string    `json:"author"`
 	CreatedAt time.Time `json:"created_at"`
 }
+
+type User struct {
+	ID        int       `json:"id"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
+	Username  string    `json:"username"`
+	CreatedAt time.Time `json:"created_at"`
+}

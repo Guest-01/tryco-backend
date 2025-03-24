@@ -56,5 +56,8 @@ func main() {
 	v1.Put("/books/:id", handler.UpdateBook)
 	v1.Delete("/books/:id", handler.DeleteBook)
 
+	v1.Get("/users/:id", handler.GetUser)
+	v1.Post("/users", handler.CreateUser)
+
 	log.Fatal(app.Listen(":3000"))
 }
