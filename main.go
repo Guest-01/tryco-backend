@@ -17,9 +17,12 @@ import (
 	"github.com/Guest-01/tryco-backend/handlers"
 )
 
-// @title TryCo API
-// @version 1.0
-// @description This is the backend for TryCo.
+// @title						TryCo API
+// @version						1.0
+// @description					This is the backend for TryCo.
+// @securityDefinitions.apiKey	SessionCookie
+// @in							cookie
+// @name						_SESSION_ID
 func main() {
 	err := godotenv.Load()
 	if err != nil {

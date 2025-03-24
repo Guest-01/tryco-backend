@@ -8,13 +8,11 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// sqlc를 이용하여 DB를 사용하는 핸들러 예시입니다.
-//
-//	@summary	GetBooks
-//	@tags		books
-//	@router		/api/v1/books [get]
-//	@success	200	{array}		sqlc.Book
-//	@failure	500	{object}	fiber.Map
+// @summary		GetBooks
+// @tags		books
+// @router		/api/v1/books [get]
+// @success		200	{array}		sqlc.Book
+// @failure		500	{object}	fiber.Map
 func (h *Handler) GetBooks(c *fiber.Ctx) error {
 	books, err := h.queries.GetBooks(c.Context())
 	if err != nil {
@@ -60,6 +58,7 @@ func (h *Handler) GetBook(c *fiber.Ctx) error {
 // @failure		500	{object}	fiber.Map
 // @failure		400	{object}	fiber.Map
 // @param		book	body	sqlc.CreateBookParams	true	"Book object"
+// @security    SessionCookie
 func (h *Handler) CreateBook(c *fiber.Ctx) error {
 	var book sqlc.Book
 	if err := c.BodyParser(&book); err != nil {
@@ -90,6 +89,7 @@ func (h *Handler) CreateBook(c *fiber.Ctx) error {
 // @success	200	{object}	sqlc.Book
 // @failure	500	{object}	fiber.Map
 // @failure	400	{object}	fiber.Map
+// @security    SessionCookie
 func (h *Handler) UpdateBook(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {
@@ -127,9 +127,10 @@ func (h *Handler) UpdateBook(c *fiber.Ctx) error {
 // @tags		books
 // @router		/api/v1/books/{id} [delete]
 // @param		id	path	int	true	"Book ID"
-// @success	204
-// @failure	500	{object}	fiber.Map
-// @failure	400	{object}	fiber.Map
+// @success		204
+// @failure		500	{object}	fiber.Map
+// @failure		400	{object}	fiber.Map
+// @security    SessionCookie
 func (h *Handler) DeleteBook(c *fiber.Ctx) error {
 	id, err := strconv.Atoi(c.Params("id"))
 	if err != nil {

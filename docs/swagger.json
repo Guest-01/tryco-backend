@@ -9,6 +9,11 @@
     "paths": {
         "/api/v1/books": {
             "get": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
                 "tags": [
                     "books"
                 ],
@@ -229,6 +234,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "SessionCookie": {
+            "type": "apiKey",
+            "name": "_SESSION_ID",
+            "in": "cookie"
         }
     }
 }

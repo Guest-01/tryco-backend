@@ -48,6 +48,8 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/fiber.Map'
+      security:
+      - SessionCookie: []
       summary: GetBooks
       tags:
       - books
@@ -149,4 +151,9 @@ paths:
       summary: UpdateBook
       tags:
       - books
+securityDefinitions:
+  SessionCookie:
+    in: cookie
+    name: _SESSION_ID
+    type: apiKey
 swagger: "2.0"

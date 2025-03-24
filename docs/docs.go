@@ -17,6 +17,11 @@ const docTemplate = `{
     "paths": {
         "/api/v1/books": {
             "get": {
+                "security": [
+                    {
+                        "SessionCookie": []
+                    }
+                ],
                 "tags": [
                     "books"
                 ],
@@ -237,6 +242,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "SessionCookie": {
+            "type": "apiKey",
+            "name": "_SESSION_ID",
+            "in": "cookie"
         }
     }
 }`
