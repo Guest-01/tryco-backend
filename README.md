@@ -3,7 +3,7 @@
 
 코인 모의 투자 서비스 TryCo의 백엔드 리파지토리입니다.
 
-## 적용된 기술 스택 설명
+## 기술 스택 설명 및 만난 이슈들
 
 언어는 Go, 프레임워크는 Fiber를 사용합니다.
 
@@ -108,7 +108,7 @@ func New(queries *sqlc.Queries) *Handler {
 
 ### 올바른 swagger model을 위한 sqlc type override
 
-만약 위에서 설정한 대로 `sqlc generate`를 했다면 아래와 같이 모델이 생성된다.
+만약 위에서 설정한 대로 `sqlc generate`를 했다면 아래와 같이 모델이 생성됩니다.
 
 ```go
 type Book struct {
@@ -119,9 +119,9 @@ type Book struct {
 }
 ```
 
-이때 날짜를 나타내는 `CreatedAt`의 타입이 `pgtype.Timestamp`인 것을 볼 수 있다. 이 때문에 swagger 문서에서 이 `Book` 모델의 모양을 보면, 실제 JSON 응답의 모양이 아닌 구조체의 모양이 나오게 된다.
+이때 날짜를 나타내는 `CreatedAt`의 타입이 `pgtype.Timestamp`인 것을 볼 수 있습니다. 이 때문에 swagger 문서에서 이 `Book` 모델의 모양을 보면, 실제 JSON 응답의 모양이 아닌 구조체의 모양이 나오게 됩니다.
 
-이를 방지하기 위해서는 일반적인 Go의 내장 타입인 `time.Time`으로 정의 되도록 설정을 변경해야하는데, 아래와 같이 sqlc 설정을 바꿔주면 된다.
+이를 방지하기 위해서는 일반적인 Go의 내장 타입인 `time.Time`으로 정의 되도록 설정을 변경해야하는데, 아래와 같이 sqlc 설정을 바꿔주면 됩니다.
 
 ```yml
 version: "2"
@@ -136,4 +136,21 @@ sql:
             nullable: true
 ```
 
-이렇게 하고 다시 `sqlc generate`를 해주면 `pgtype.Timestamp`가 아닌 `time.Time`을 쓰기 때문에, swagger 문서 상에서도 모델이 JSON 응답과 일치하게 된다.
+이렇게 하고 다시 `sqlc generate`를 해주면 `pgtype.Timestamp`가 아닌 `time.Time`을 쓰기 때문에, swagger 문서 상에서도 모델이 JSON 응답과 일치하게 됩니다.
+
+### Swagger에서 Cookie Auth 표시 방법
+
+Swagger에서는 여러가지 Auth 방법을 문서화 할 수 있도록 제공하는데, 안타깝게도 Session-Cookie 방식은 완벽하게 지원하지 않습니다. [공식 문서](https://swagger.io/docs/specification/v3_0/authentication/cookie-authentication/)상으로 보면, 쿠키 인증은 ApiKey 방식의 일종으로 보고 있다고 한다. 따라서 ApiKey 타입의 인증으로 하되, `in: cookie`와 `name: 쿠키이름`을 통해 쿠키에서 값을 가져온다는 것을 명시할 수 있습니다.
+
+```go
+// @title						            TryCo API
+// @version						          1.0
+// @description					        This is the backend for TryCo.
+// @securityDefinitions.apiKey	SessionCookie
+// @in							            cookie
+// @name						            _SESSION_ID
+func main() {
+  //...
+```
+
+그리고 각 API Operations에서는 간단하게 `// @security {이름}`만 주석으로 달아주면 됩니다. 위 예시의 경우엔 `// @security SessionCookie`입니다.
